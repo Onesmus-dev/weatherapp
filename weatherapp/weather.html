@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Weather App</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: #fff;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: background-image 0.5s ease-in-out;
+    }
+
+    .overlay {
+      background-color: rgba(0, 0, 0, 0.5);
+      padding: 40px;
+      border-radius: 20px;
+      text-align: center;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+      backdrop-filter: blur(10px);
+      width: 320px;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 30px;
+    }
+
+    input[type="text"] {
+      padding: 10px;
+      border: none;
+      border-radius: 10px;
+      margin-bottom: 10px;
+      width: 250px;
+      font-size: 16px;
+    }
+
+    button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 10px;
+      background-color: #fff;
+      color: #0072ff;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #e0e0e0;
+    }
+
+    .temp {
+      font-size: 48px;
+      font-weight: bold;
+    }
+
+    .footer {
+      font-size: 14px;
+      margin-top: 20px;
+      opacity: 0.7;
+    }
+  </style>
+
+  {% if main_weather %}
+  <style>
+    body {
+      background-image: url("{% if main_weather == 'Clear' %}https://images.unsplash.com/photo-1502082553048-f009c37129b9?auto=format&fit=crop&w=1350&q=80{% elif main_weather == 'Clouds' %}https://images.unsplash.com/photo-1499346030926-9a72daac6c63?auto=format&fit=crop&w=1350&q=80{% elif main_weather == 'Rain' %}https://images.unsplash.com/photo-1516901121754-1606f7fdbb4b?auto=format&fit=crop&w=1350&q=80{% elif main_weather == 'Snow' %}https://images.unsplash.com/photo-1608889174113-52378c3c8d6a?auto=format&fit=crop&w=1350&q=80{% elif main_weather == 'Thunderstorm' %}https://images.unsplash.com/photo-1501612780327-45045538702b?auto=format&fit=crop&w=1350&q=80{% else %}https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=1350&q=80{% endif %}");
+    }
+  </style>
+  {% endif %}
+</head>
+<body>
+
+  <form method="POST">
+    {% csrf_token %}
+    <input type="text" name="city" placeholder="Enter city name" required>
+    <button type="submit">Get Weather</button>
+  </form>
+
+  {% if country_code %}
+  <div class="overlay">
+    <h2>Weather in {{ city }}</h2>
+    <p><strong>Country:</strong> {{ country_code }}</p>
+    <p><strong>Coordinates:</strong> {{ coordinate }}</p>
+    <p class="temp">{{ temp }}°C</p>
+    <p><strong>Humidity:</strong> {{ humidity }}%</p>
+    <p><strong>Condition:</strong> {{ description }}</p>
+    <img src="https://openweathermap.org/img/wn/{{ icon }}@2x.png" alt="{{ description }}">
+    <div class="footer">Powered by OpenWeatherMap</div>
+  </div>
+  {% endif %}
+
+</body>
+</html>
